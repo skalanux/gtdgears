@@ -25,10 +25,12 @@ SET character_set_client = utf8;
 CREATE TABLE `actions` (
   `act_id` int(10) unsigned NOT NULL auto_increment,
   `act_buc_id` int(11) NOT NULL,
+  `act_name` varchar(255) default NULL,
+  `act_descr` text,
   `act_startdate` datetime NOT NULL,
   `act_enddate` datetime NOT NULL,
   PRIMARY KEY  (`act_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -37,6 +39,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `actions` WRITE;
 /*!40000 ALTER TABLE `actions` DISABLE KEYS */;
+INSERT INTO `actions` VALUES (1,1,'action1','hacer cosa 1','2008-10-01 13:47:13','2008-10-01 13:47:13'),(2,1,'action2','hacercosa2','2008-10-01 13:47:21','2008-10-01 13:47:21'),(3,1,'action3','hacer cosa3','2008-10-01 13:47:28','2008-10-01 13:47:28'),(4,1,'action3','hacer cosa3','2008-10-01 13:56:40','2008-10-01 13:56:40'),(5,1,'action3','hacer cosa3','2008-10-01 15:17:57','2008-10-01 15:17:57'),(6,1,'action3','hacer cosa3','2008-10-01 15:22:03','2008-10-01 15:22:03');
 /*!40000 ALTER TABLE `actions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,4 +126,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2008-09-30 20:58:18
+-- Dump completed on 2008-10-01 18:30:04
