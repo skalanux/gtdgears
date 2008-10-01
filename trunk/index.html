@@ -1,0 +1,118 @@
+   <html>
+   <head>
+   <script  type="text/javascript"  src="gears_init.js"></script>
+   <script  type="text/javascript" src="prototype.js"></script>
+   </head>
+   <body  onload="initializedb()">
+
+<table  width="100%">
+   <tr><td  width="20%" valign="top">
+   <table  width="100%" id="elActions">
+   </table>
+   </td><td  width="80%" valign="top">
+   <div  id="elDescr"></div>
+   </td></tr></table>
+
+<a href="javascript:void  sync();">Go Online</a>
+
+<script>
+     var db;
+
+function sync()
+     {
+
+     new Ajax.Request( 'actions.php', { method:  'get',
+       onSuccess: function( transport ) {
+     var actionTags =  transport.responseXML.getElementsByTagName( 'actions' );
+   
+     
+    for( var a = 0; a < actionTags.length;  a++ ) {
+           
+           aid=parseInt( actionTags[a].getAttribute('id'));
+           abid=parseInt(  actionTags[a].getAttribute('buc_id') );
+           aname=actionTags[a].getAttribute('name'); 
+           adesc=actionTags[a].firstChild.nodeValue;
+           astartdate=actionTags[a].getAttribute('start_date');
+           aenddate=actionTags[a].getAttribute('end_date');
+            /*
+           aid=1;
+           abid=1;
+           aname="das"; 
+           adesc="das";
+           astartdate="2008-10-01 13:47:13";
+           aenddate="2008-10-01 13:47:13";
+            */
+           addAction(aid, abid, aname, adesc, astartdate,aenddate );
+      }
+    
+       showActions();
+     } } );
+     }
+
+function initializedb()  {
+     if (!window.google || !google.gears)
+       return;
+
+  try {
+       db =  google.gears.factory.create('beta.database', '1.0');
+     } catch (ex) {
+       alert('Could not create database: ' +  ex.message);
+     }
+
+  if (db) {
+       db.open('gtdgears')
+       db.execute('create table if not exists  actions' +
+          ' ( act_id int, act_buc_id int, act_name varchar(255), act_descr text, act_startdate datetime, act_enddate datetime )');
+     }
+     showActions();
+     }
+
+function showAction( id  )
+     {
+     var rs = db.execute( 'select act_descr from actions where act_id = ?', [ id ] );
+
+     var found = 0;
+     while (rs.isValidRow()) {  $('elDescr').innerHTML = rs.field(0); rs.next(); }
+     rs.close();
+     }
+
+function showActions()
+     {
+     while( $('elActions').rows.length > 0 )
+      $('elActions').deleteRow( -1 );
+
+  var rs = db.execute( 'select * from actions'  );
+
+     while (rs.isValidRow())
+     {  
+       var elTR =  $('elActions').insertRow( -1 );
+       var elTD = elTR.insertCell( -1 );
+       elTD.onmouseover = function() {  this.style.background = '#eee'; };
+       elTD.onmouseout = function() {  this.style.background = 'none'; };
+       elTD.id = rs.field( 0 );
+       elTD.onmouseup = function() { showAction(  this.id ); };
+       elTD.appendChild( document.createTextNode(  rs.field(1) ) );
+       rs.next();
+     }
+     rs.close();
+     }
+
+function testaddAction(){
+      db.execute('insert into actions values (2, 1, "dsad", "dsada", "2008-10-01 13:47:13", "2008-10-01 13:47:13")');       
+}
+
+function addAction(aid, abid, aname, adesc, astartdate,aenddate )
+     {
+
+     var rs = db.execute( 'select * from actions  where act_id = ?', [ aid ] );
+     var found = 0;
+     while (rs.isValidRow()) { found++; rs.next();  }
+     rs.close();
+     if ( found == 0 )
+       db.execute('insert into actions values (?, ?, ?, ?, ?, ?)', [aid, abid,aname,adesc,astartdate,aenddate]);
+
+     }
+
+   </script>
+   </body>
+   </html>
