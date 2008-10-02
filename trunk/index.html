@@ -23,7 +23,7 @@ function sync()
 
      new Ajax.Request( 'actions.php', { method:  'get',
        onSuccess: function( transport ) {
-     var actionTags =  transport.responseXML.getElementsByTagName( 'actions' );
+     var actionTags =  transport.responseXML.documentElement.getElementsByTagName( 'actions' );
    
      
     for( var a = 0; a < actionTags.length;  a++ ) {
