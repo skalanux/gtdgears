@@ -1,7 +1,6 @@
 <?php
- require_once("DB.php");
-
-header(  "content-type: text/xml" );
+header("content-type: text/xml");
+require_once("DB.php");
 
 $db =& DB::Connect(  'mysql://root:lanux@localhost/gtdgears', array() );
 if (PEAR::isError($db))  { die($db->getMessage()); }
