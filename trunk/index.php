@@ -11,10 +11,10 @@
 <script>
      var db;
 
-function sync()
+function sync(context)
      {
 
-     new Ajax.Request( 'actions.php', { method:  'get',
+     new Ajax.Request( 'actions.php?con='+context, { method:  'get',
        onSuccess: function( transport ) {
         var actionTags;
      actionTags =  transport.responseXML.documentElement.getElementsByTagName( 'action' );
@@ -50,7 +50,7 @@ function initializedb()  {
   if (db) {
        db.open('gtdgears')
        db.execute('create table if not exists  actions' +
-          ' ( act_id int, act_buc_id int, act_ctxt_id, act_name varchar(255), act_descr text, act_startdate datetime, act_enddate datetime )');
+          ' ( act_id int, act_buc_id int, act_ctxt_id int, act_name varchar(255), act_descr text, act_startdate datetime, act_enddate datetime )');
      }
      showActions();
      }
@@ -79,7 +79,7 @@ function showActions()
        elTD.onmouseout = function() {  this.style.background = 'none'; };
        elTD.id = rs.field( 0 );
        elTD.onmouseup = function() { showAction(  this.id ); };
-       elTD.appendChild( document.createTextNode(  rs.field(1) ) );
+       elTD.appendChild( document.createTextNode(  rs.field(3) ) );
        rs.next();
      }
      rs.close();
@@ -89,7 +89,7 @@ function testaddAction(){
       db.execute('insert into actions values (2, 1, "dsad", "dsada", "2008-10-01 13:47:13", "2008-10-01 13:47:13")');       
 }
 
-function addAction(aid, abid, aname, adesc, astartdate,aenddate )
+function addAction(aid, abid, acid, aname, adesc, astartdate,aenddate )
      {
 
      var rs = db.execute( 'select * from actions  where act_id = ?', [ aid ] );
@@ -112,7 +112,7 @@ function addAction(aid, abid, aname, adesc, astartdate,aenddate )
 <li> <a class="" href="#">Personal</a>
 </li>
 <li>
-<a href="javascript:void  sync();">MW</a>
+<a href="javascript:void  sync(1);">MW</a>
 </li>
 <li> <a class="" href="#">Lanux</a>
 </li>
@@ -132,13 +132,11 @@ function addAction(aid, abid, aname, adesc, astartdate,aenddate )
 <li class="list-sourceforge"> <button type="button" value="Agregar" name="add_action">Agregar</button>
 </li>
 </ul>
-<li class="list-sourceforge"><a href="http://sourceforge.net/projects/kompozer"><br>
 </a></li>
 <li class="list-sourceforge"></li>
 </div>
 <p style="text-align: center;"> <br>
 </p>
-<p style="text-align: center;"> <a href="http://sourceforge.net/donate/index.php?group_id=170132"><br>
 </a> </p>
 </div>
 <div style="margin-left: 22px; width: 734px;" id="content"><br>
@@ -160,11 +158,7 @@ SomeDay / Maybe
 <hr style="width: 100%; height: 2px;">
 </div>
 <div id="footer">
-<p> &nbsp;<a href="http://validator.w3.org/check?uri=referer" style="background-image: url(http://kompozer.sourceforge.net/images/valid_html401_80x15_rollover.png);"><span>Valid
-HTML 4.01</span> </a> <a href="http://jigsaw.w3.org/css-validator/check/referer" style="background-image: url(http://kompozer.sourceforge.net/images/valid_css_80x15_rollover.png);">
-<span>Valid CSS</span> </a> </p>
-<p><br>
-</p>
+SKA // Lanux
 </div>
 <div id="extra2"><span></span></div>
 <div id="extra3"><span></span></div>
