@@ -6,7 +6,7 @@
 <script  type="text/javascript"  src="gears_init.js"></script>
 <script  type="text/javascript" src="prototype.js"></script>
 
-<link rel="shortcut icon" type="image/x-icon" href="http://www.kompozer.net/favicon.ico">
+<!-- <link rel="shortcut icon" type="image/x-icon" href="http://www.kompozer.net/favicon.ico"> -->
 <link rel="stylesheet" href="gtdgears_files/style.css" type="text/css">
 <script>
      var db;
@@ -18,8 +18,6 @@ function sync(context)
        onSuccess: function( transport ) {
         var actionTags;
      actionTags =  transport.responseXML.documentElement.getElementsByTagName( 'action' );
-     //actionTags =  transport.responseXML.documentElement.length;
-   
      
     for( var a = 0; a < actionTags.length;  a++ ) {
            
@@ -33,7 +31,7 @@ function sync(context)
            addAction(aid, abid, acid, aname, adesc, astartdate,aenddate);
       }
     
-       showActions();
+       showActions(context);
      } } );
      }
 
@@ -52,7 +50,7 @@ function initializedb()  {
        db.execute('create table if not exists  actions' +
           ' ( act_id int, act_buc_id int, act_ctxt_id int, act_name varchar(255), act_descr text, act_startdate datetime, act_enddate datetime )');
      }
-     showActions();
+     //showActions();
      }
 
 function showAction( id  )
@@ -64,12 +62,12 @@ function showAction( id  )
      rs.close();
      }
 
-function showActions()
+function showActions(ctxt_id)
      {
      while( $('elActions').rows.length > 0 )
       $('elActions').deleteRow( -1 );
 
-  var rs = db.execute( 'select * from actions'  );
+  var rs = db.execute( 'select * from actions where act_ctxt_id='+ctxt_id );
 
      while (rs.isValidRow())
      {  
@@ -109,12 +107,12 @@ function addAction(aid, abid, acid, aname, adesc, astartdate,aenddate )
 </div>
 <div id="menu1">
 <ul>
-<li> <a class="" href="#">Personal</a>
+<li> <a class="" href="javascript:void  sync(1);">Personal</a>
 </li>
 <li>
-<a href="javascript:void  sync(1);">MW</a>
+<a href="javascript:void  sync(2);">MW</a>
 </li>
-<li> <a class="" href="#">Lanux</a>
+<li> <a class="" href="javascript:void  sync(3);">Lanux</a>
 </li>
 </ul>
 </div>

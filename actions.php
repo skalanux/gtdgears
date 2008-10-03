@@ -5,7 +5,8 @@ require_once("DB.php");
 $db =& DB::Connect(  'mysql://root:lanux@localhost/gtdgears', array() );
 if (PEAR::isError($db))  { die($db->getMessage()); }
 
-$res = $db->query(  'SELECT * FROM actions where act_ctxt_id=1' );
+$query = "SELECT * FROM actions where act_ctxt_id=".$_GET["con"];
+$res = $db->query( $query );
 ?>
 <actions id="actions">
 <?php
