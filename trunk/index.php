@@ -58,20 +58,20 @@ function showAction( id  )
      var rs = db.execute( 'select act_descr from actions where act_id = ?', [ id ] );
 
      var found = 0;
-     while (rs.isValidRow()) {  $('elDescr').innerHTML = rs.field(0); rs.next(); }
+     while (rs.isValidRow()) {  $('elDescr_na').innerHTML = rs.field(0); rs.next(); }
      rs.close();
      }
 
 function showActions(ctxt_id)
      {
-     while( $('elActions').rows.length > 0 )
-      $('elActions').deleteRow( -1 );
+     while( $('elActions_na').rows.length > 0 )
+      $('elActions_na').deleteRow( -1 );
 
   var rs = db.execute( 'select * from actions where act_ctxt_id='+ctxt_id );
 
      while (rs.isValidRow())
      {  
-       var elTR =  $('elActions').insertRow( -1 );
+       var elTR =  $('elActions_na').insertRow( -1 );
        var elTD = elTR.insertCell( -1 );
        elTD.onmouseover = function() {  this.style.background = '#eee'; };
        elTD.onmouseout = function() {  this.style.background = 'none'; };
@@ -96,7 +96,6 @@ function addAction(aid, abid, acid, aname, adesc, astartdate,aenddate )
      rs.close();
      if ( found == 0 )
        db.execute('insert into actions values (?, ?, ?, ?, ?, ?, ?)', [aid, abid,acid,aname,adesc,astartdate,aenddate]);
-
      }
 
    </script>
@@ -141,19 +140,45 @@ function addAction(aid, abid, acid, aname, adesc, astartdate,aenddate )
 Next Actions
 <table  width="100%">
    <tr><td  width="20%" valign="top">
-   <table  width="100%" id="elActions">
+   <table  width="100%" id="elActions_na">
    </table>
    </td><td  width="80%" valign="top">
-   <div  id="elDescr"></div>
+   <div  id="elDescr_na"></div>
 </td></tr>
 </table>
 <hr style="width: 100%; height: 2px;">
 Projects
+<table  width="100%">
+   <tr><td  width="20%" valign="top">
+   <table  width="100%" id="elActions_pro">
+   </table>
+   </td><td  width="80%" valign="top">
+   <div  id="elDescr_pro"></div>
+</td></tr>
+</table>
+
 <hr style="width: 100%; height: 2px;">
 Deferred
 <hr style="width: 100%; height: 2px;">
+<table  width="100%">
+   <tr><td  width="20%" valign="top">
+   <table  width="100%" id="elActions_def">
+   </table>
+   </td><td  width="80%" valign="top">
+   <div  id="elDescr_def"></div>
+</td></tr>
+</table>
+
 SomeDay / Maybe
 <hr style="width: 100%; height: 2px;">
+<table  width="100%">
+   <tr><td  width="20%" valign="top">
+   <table  width="100%" id="elActions_may">
+   </table>
+   </td><td  width="80%" valign="top">
+   <div  id="elDescr_may"></div>
+</td></tr>
+</table>
 </div>
 <div id="footer">
 SKA // Lanux
