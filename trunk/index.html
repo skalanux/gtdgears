@@ -24,7 +24,7 @@ function sync()
      new Ajax.Request( 'actions.php', { method:  'get',
        onSuccess: function( transport ) {
         var actionTags;
-     actionTags =  transport.responseXML.documentElement.getElementsByTagName( 'actions' );
+     actionTags =  transport.responseXML.documentElement.getElementsByTagName( 'action' );
      //actionTags =  transport.responseXML.documentElement.length;
    
      
