@@ -11,29 +11,38 @@
 <script>
      var db;
 
-function sync(context)
-     {
-
-     new Ajax.Request( 'actions.php?con='+context, { method:  'get',
-       onSuccess: function( transport ) {
-        var actionTags;
-     actionTags =  transport.responseXML.documentElement.getElementsByTagName( 'action' );
+function getActions(context){
+    //Revisar porque aun estando online me toma la base de abajo
+    if (getCookie("offlinemode")){
+       showActions(context);
+    }
+    else{
+         new Ajax.Request( 'actions.php?con='+context, { method:  'get',
+           onSuccess: function( transport ) {
+         var actionTags;
+        actionTags =  transport.responseXML.documentElement.getElementsByTagName( 'action' );
      
-    for( var a = 0; a < actionTags.length;  a++ ) {
+        for( var a = 0; a < actionTags.length;  a++ ) {
            
-           aid=parseInt( actionTags[a].getAttribute('id'));
-           abid=parseInt(  actionTags[a].getAttribute('buc_id') );
-           acid=parseInt(  actionTags[a].getAttribute('ctxt_id') );
-           aname=actionTags[a].getAttribute('name'); 
-           astartdate=actionTags[a].getAttribute('start_date');
-           aenddate=actionTags[a].getAttribute('end_date');
-           adesc=actionTags[a].firstChild.nodeValue;
-           addAction(aid, abid, acid, aname, adesc, astartdate,aenddate);
-      }
+            aid=parseInt( actionTags[a].getAttribute('id'));
+            abid=parseInt(  actionTags[a].getAttribute('buc_id') );
+            acid=parseInt(  actionTags[a].getAttribute('ctxt_id') );
+            aname=actionTags[a].getAttribute('name'); 
+            astartdate=actionTags[a].getAttribute('start_date');
+            aenddate=actionTags[a].getAttribute('end_date');
+            adesc=actionTags[a].firstChild.nodeValue;
+            sync(aid, abid, acid, aname, adesc, astartdate,aenddate);
+        }
     
        showActions(context);
      } } );
-     }
+     
+    }
+    }
+
+function sync(aid, abid, acid, aname, adesc, astartdate,aenddate){
+           addAction(aid, abid, acid, aname, adesc, astartdate,aenddate);
+}
 
 function initializedb()  {
      if (!window.google || !google.gears)
@@ -98,20 +107,61 @@ function addAction(aid, abid, acid, aname, adesc, astartdate,aenddate )
        db.execute('insert into actions values (?, ?, ?, ?, ?, ?, ?)', [aid, abid,acid,aname,adesc,astartdate,aenddate]);
      }
 
+function setCookie( name, value, expires, path, domain, secure ) {
+    var today = new Date();
+    today.setTime( today.getTime() );
+    if ( expires ) {
+        expires = expires * 1000 * 60 * 60 * 24;
+    }
+    var expires_date = new Date( today.getTime() + (expires) );
+    document.cookie = name+'='+escape( value ) +
+        ( ( expires ) ? ';expires='+expires_date.toGMTString() : '' ) + //expires.toGMTString()
+        ( ( path ) ? ';path=' + path : '' ) +
+        ( ( domain ) ? ';domain=' + domain : '' ) +
+        ( ( secure ) ? ';secure' : '' );
+}
+function getCookie(c_name)
+{
+if (document.cookie.length>0)
+  {
+  c_start=document.cookie.indexOf(c_name + "=");
+  if (c_start!=-1)
+    { 
+    c_start=c_start + c_name.length+1; 
+    c_end=document.cookie.indexOf(";",c_start);
+    if (c_end==-1) c_end=document.cookie.length;
+    return unescape(document.cookie.substring(c_start,c_end));
+    } 
+  }
+return "";
+}
+
+function setOffline(){
+setCookie( 'offlinemode', '1', '', '/', '', '' );
+}
+
+function setOnline(){
+setCookie( 'offlinemode', '0', '', '/', '', '' );
+}
+
+
+
    </script>
 
 </head>
 <body  onload="initializedb()">
 <div style="height: 27px;" id="header">
+<a href="javascript:setOnline();">online</a>
+<a href="javascript:setOffline();">offline</a>
 </div>
 <div id="menu1">
 <ul>
-<li> <a class="" href="javascript:void  sync(1);">Personal</a>
+<li> <a class="" href="javascript:void  getActions(1);">Personal</a>
 </li>
 <li>
-<a href="javascript:void  sync(2);">MW</a>
+<a href="javascript:void  getActions(2);">MW</a>
 </li>
-<li> <a class="" href="javascript:void  sync(3);">Lanux</a>
+<li> <a class="" href="javascript:void  getActions(3);">Lanux</a>
 </li>
 </ul>
 </div>
