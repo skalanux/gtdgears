@@ -13,7 +13,7 @@
 
 function getActions(context){
     //Revisar porque aun estando online me toma la base de abajo
-    if (getCookie("offlinemode")){
+    if (getCookie("offlinemode")=='1'){
        showActions(context);
     }
     else{
