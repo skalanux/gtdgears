@@ -1,0 +1,1 @@
+The idea is to have a fully browser integrated tools, that is still accesible while off-line
